@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "uSZDW72I4n67HzphLW37BcyWiZ77i0WGAi8XVMpktJ3g3ZR8J960cgCCMhiJ6EfA+qDKENa7hkmWuoXLwYiM5A==",
+  "success": true,
+  "projectFilePath": "/mnt/1/projects/sharp/practice/practice/practice.csproj",
+  "expectedPackageFiles": [
+    "/home/lolpie/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.0/microsoft.aspnetcore.app.ref.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
