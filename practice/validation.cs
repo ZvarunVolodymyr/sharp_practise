@@ -23,10 +23,10 @@ public class validation
         return value;
     }
 
-    static public string? international_passport(string? value, string message="{0} wrong format")
+    static public string? regex_match(string? value, string regex, string message="{0} wrong format")
     {
         value = value.ToString();
-        if (!Regex.IsMatch(value, config.international_passport))
+        if (!Regex.IsMatch(value, regex))
             throw new Exception(String.Format(message, value));
         return value;
     }
@@ -34,10 +34,18 @@ public class validation
     static public T in_array<T, Iter>(T value, Iter array, string message="{0} isn't in array {1}") 
         where Iter: IEnumerable<T>
     {
+        var str = "";
         foreach (var val in array)
+        {
             if (Equals(val, value))
                 goto good;
-        throw new Exception(String.Format(message, value, array));
+            if (str == "")
+                str = $"{val}";
+            else
+                str = $"{str}, {val}";
+            
+        }
+        throw new Exception(String.Format(message, value, str));
         good:
         return value;
     }

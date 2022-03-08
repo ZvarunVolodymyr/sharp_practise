@@ -11,51 +11,6 @@ namespace Main
 
     public class MainMenu
     {
-        private class main_menu_struct : Interfaces.ICallAble
-        {
-            public conteiner<certificate_class> conteiner;
-
-            public main_menu_struct(conteiner<certificate_class>? conteiner_ = null)
-            {
-                this.conteiner = conteiner_;
-            }
-            public void call() {}
-        }
-
-        private class change_: main_menu_struct
-        {
-            public change_(conteiner<certificate_class> val): base(val){}
-            public void call()
-            {
-                Console.WriteLine("Write obj id");
-                int? id = validation.validation.positive_integer(int.Parse(Console.ReadLine()));
-                Console.WriteLine("Write field name");
-                var name = Console.ReadLine();
-                Console.WriteLine("Write new value");
-                var value = Console.ReadLine();
-                conteiner.change(id, name, value);
-                Console.WriteLine("Changed");
-            }
-        }
-        private class sort_: main_menu_struct
-        {
-            public sort_(conteiner<certificate_class> val): base(val){}
-            public void call()
-            {
-                Console.WriteLine("Write field, you want sort to do");
-                conteiner.sort(Console.ReadLine());
-                Console.WriteLine("Sorted");
-            }
-        }
-        private class read_from_file_: main_menu_struct
-        {
-            public read_from_file_(conteiner<certificate_class> val): base(val){}
-            public void call()
-            {
-                Console.WriteLine("Write file name");
-                conteiner.read_from_file(Console.ReadLine());
-            }
-        }
         public static void search(conteiner<certificate_class> conteiner)
         {
             Console.WriteLine("Write value to search:");
@@ -72,55 +27,91 @@ namespace Main
                 Console.WriteLine(ans_string);
             }
         }
-        
         public static void sort(conteiner<certificate_class> conteiner)
         {
-            validation_functions.try_until_success(new sort_(conteiner));
+            Console.WriteLine("Write field, you want sort to do");
+            conteiner.sort(Console.ReadLine());
+            Console.WriteLine("Sorted");
         }   
 
         public static void add(conteiner<certificate_class> conteiner)
         {
             conteiner.Add(new certificate_class().read_from_console());
+            Console.WriteLine(conteiner[conteiner.Length - 1]);
+            conteiner.write_to_file();
         }
         
         public static void read_from_file(conteiner<certificate_class> conteiner)
         {
-            validation_functions.try_until_success(new read_from_file_(conteiner));
+            Console.WriteLine("Write file name");
+            conteiner.read_from_file(Console.ReadLine());
+            Console.WriteLine(conteiner);
+            conteiner.write_to_file();
         }
         
         public static void change(conteiner<certificate_class> conteiner)
         {
-            validation_functions.try_until_success(new change_(conteiner));
+            Console.WriteLine("Write obj id");
+            int? id = validation.validation.positive_integer(int.Parse(Console.ReadLine()));
+            Console.WriteLine("Write field name");
+            var name = Console.ReadLine();
+            Console.WriteLine("Write new value");
+            var value = Console.ReadLine();
+            conteiner.change(id, name, value);
+            Console.WriteLine("Changed");
+            conteiner.write_to_file();
         }
 
-        public static void exit()
+        public static void print(conteiner<certificate_class> conteiner)
+        {
+            Console.WriteLine(conteiner.ToString());
+        }
+
+        public static void exit(conteiner<certificate_class> conteiner)
         {
             System.Environment.Exit(0);
         }
         public static void Main(string[] args)
         {
-            var functions_ = new Dictionary<string, Action<conteiner<certificate_class>>>();
-            functions_["search"] = search;
-            functions_["sort"] = sort;
-            functions_["read_from_file"] = read_from_file;
-            functions_["add"] = add;
+            var functions_ = new Dictionary<string, Action<conteiner<certificate_class>>>()
+            {
+                {"search", search},
+                {"sort", sort}, 
+                {"read from file", read_from_file},
+                {"add", add},
+                {"change", change},
+                {"exit", exit},
+                {"print", print}
+            };
+            string[] try_until_success_list =
+            {
+                "search", "sort", "add", "change"
+            };
             var cont = new conteiner<certificate_class>();
+            var str = helping_func.seperate<string, string[]>(functions_.Keys.ToArray(),
+                name => name.Replace('_', ' '));
+            
             while (true)
             {
-                Console.WriteLine("Choose what to do\n" +
-                                  "search, sort, read_from_file, add");
+                Console.WriteLine($"Choose what to do\n{str}");
                 try
                 {
-                    functions_[Console.ReadLine()](cont);
+                    string command_name = Console.ReadLine().ToLower();
+                    foreach (var val in try_until_success_list)
+                        if (command_name == val)
+                        {
+                            validation_functions.try_until_success(functions_[command_name], cont);
+                            goto next;
+                        }
+                    validation_functions.print_error(functions_[command_name], cont);
+                    next:
+                    continue;
                 }
-                catch (Exception e)
+                catch (KeyNotFoundException e)
                 {
-                    Console.WriteLine("incorrect command");
+                    Console.WriteLine($"incorrect command, e");
                 }
-                    
-                
             }
-            
         }
     }
 }

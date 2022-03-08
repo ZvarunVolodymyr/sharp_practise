@@ -3,30 +3,20 @@ using System.Net;
 namespace CertificateClass;
 using System;
 using validation;
+
 public partial class certificate_class
 {
-    private struct read_console : helping.Interfaces.ICallAble
+    private void read(string name)
     {
-        private certificate_class obj;
-        private string name;
-        public read_console(certificate_class this_, string name)
-        {
-            this.obj = this_;
-            this.name = name;
-        }
-        public void call()
-        {
-            obj.set_field(name, Console.ReadLine());
-        }
+        this.set_field(name, Console.ReadLine());
     }
     public certificate_class read_from_console()
     {
-        foreach (var name in this.var_list)
+        foreach (var name in this.field_list)
         {
-            Console.Write($"Write {name} field\n");
-            validation_functions.try_until_success(new read_console(this, name));
+            Console.Write($"Write {name.Replace('_', ' ')} field\n");
+            validation_functions.try_until_success(this.read, name);
         }
-
         return this;
     }
 
@@ -39,9 +29,10 @@ public partial class certificate_class
                 break;
             try
             {
-                string[] info = text[line].Split(':');
-                var name = info[0].Trim();
-                var value = info[1].Trim();
+                var seperator_pos = text[line].IndexOf(':');
+                var name = text[line].Substring(0, seperator_pos).Split('"')[1];
+                var value = text[line].Substring(seperator_pos + 1).Split('"')[1];
+                
                 this.set_field(name, value);
             }
             catch (Exception e)
@@ -58,41 +49,28 @@ public partial class certificate_class
                 message += missed + ", ";
             error.Add(message.Substring(0, message.Length - 2));
         }
+
         return error;
     }
 
     public bool have_value(string value_to_search)
     {
-        foreach (var name in var_list)
+        foreach (var name in field_list)
         {
             string val = this.get_field(name).ToString();
             if (val.Contains(value_to_search))
                 return true;
         }
+
         return false;
     }
 
     public override string ToString()
     {
         string ans = "{\n";
-        foreach (var name in var_list)
-        {
-            string val = this.get_field(name).ToString();
-            ans += $"{name}: {val}\n";
-        }
-
-        ans += "}\n";
+        ans += helping.helping_func.seperate<string, string[]>(this.field_list, name => 
+            $"\t\"{name}\": \"{this.get_field(name)}\"", ",\n");
+        ans += "\n}";
         return ans;
-    }
-
-    public void set_field<T>(string name, T value)
-    {
-        var property = typeof(certificate_class).GetProperty(name);
-        property.SetValue(this, Convert.ChangeType(value, property.GetType()));
-    }
-    
-    public object? get_field(string name)
-    {
-        return typeof(certificate_class).GetProperty(name).GetValue(this);
     }
 }

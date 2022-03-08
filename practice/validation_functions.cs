@@ -32,13 +32,13 @@ static public class validation_functions
 
     // DON'T KNOW HOW TO WRITE THIS NOW
     
-    public static void try_until_success<T>(T func) where T: helping.Interfaces.ICallAble
+    public static void try_until_success<T>(Action<T> func, T parametr)
     {
         while (true)
         {
             try
             {
-                func.call();
+                func(parametr);
                 return;
             }
             catch (Exception e)
@@ -47,19 +47,18 @@ static public class validation_functions
             }
         }
     }
-    //
-    // public static bool print_error<T, ReT>(Func<T, ReT> func, T value, string log_file = "")
-    // {
-    //     try
-    //     {
-    //         func(value);
-    //         return true;
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         if (log_file == "")
-    //             Console.WriteLine(e.Message);
-    //         return false;
-    //     }
-    // }
+    public static bool print_error<T>(Action<T> func, T value, string log_file = "")
+    {
+        try
+        {
+            func(value);
+            return true;
+        }
+        catch (Exception e)
+        {
+            if (log_file == "")
+                Console.WriteLine(e.Message);
+            return false;
+        }
+    }
 }

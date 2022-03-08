@@ -1,11 +1,36 @@
 using System.Collections;
+using helping;
 using validation;
 
 namespace practice;
 
 using CertificateClass;
+using config;
 public class conteiner<type> where type: certificate_class, new()
 {
+    class iterator : IEnumerator
+    {
+        private node current;
+
+        public iterator(node start)
+        {
+            current = new node();
+            current.next = start;
+        }
+        public bool MoveNext()
+        {
+            current = current.next;
+            return (current != null);
+        }
+        public void Reset()
+        {
+            current = current.previous;
+        }
+        public object Current
+        {
+            get { return current.value;}
+        }
+    }
     public string log_file;
     private class node
     {
@@ -13,7 +38,7 @@ public class conteiner<type> where type: certificate_class, new()
         public node? previous;
         public type? value;
 
-        public node(type? value, node? next = null, node? previous = null)
+        public node(type? value=null, node? next = null, node? previous = null)
         {
             this.value = value;
             this.next = next;
@@ -26,6 +51,7 @@ public class conteiner<type> where type: certificate_class, new()
     private node? end;
     public void Add(type value)
     {
+        this.Length += 1;
         if (start == null)
         {
             start = end = new node(value);
@@ -38,6 +64,7 @@ public class conteiner<type> where type: certificate_class, new()
 
     public void AddFront(type value)
     {
+        this.Length += 1;
         if (start == null)
         {
             start = end = new node(value);
@@ -59,6 +86,7 @@ public class conteiner<type> where type: certificate_class, new()
     public void clear()
     {
         clear(start);
+        start = end = null;
     }
 
     public type? this[int key]
@@ -67,8 +95,11 @@ public class conteiner<type> where type: certificate_class, new()
         {
             if (key >= this.Length)
                 throw new IndexOutOfRangeException();
+            if (key == this.Length - 1)
+                return end.value;
+            
             var current = start;
-            for (int i = 0; i <= key; i++)
+            for (int i = 0; i < key; i++)
                 current = current.next;
             return current.value;
         }
@@ -83,6 +114,11 @@ public class conteiner<type> where type: certificate_class, new()
         }
     }
 
+    public IEnumerator GetEnumerator()
+    {
+        return (IEnumerator)new iterator(start);
+    }
+
     public void read_from_file(string file_path, string log_file = "")
     {
         this.clear();
@@ -94,7 +130,7 @@ public class conteiner<type> where type: certificate_class, new()
                 var new_value = new type();
                 line++;
                 var errors = new_value.parse_from_string(text, ref line);
-                if (errors.Count == 0)
+                if (errors.Count != 0)
                 {
                     validation_functions.log_error(errors, log_file);
                     continue;
@@ -112,8 +148,8 @@ public class conteiner<type> where type: certificate_class, new()
             flag = false;
             for (int i = 0; i < this.Length - 1; i++)
             {
-                var val_1 = (IComparable)typeof(type).GetProperty(field_name).GetValue(this[i]);
-                var val_2 = (IComparable)typeof(type).GetProperty(field_name).GetValue(this[i + 1]);
+                var val_1 = (IComparable)this[i].get_field(field_name);
+                var val_2 = (IComparable)this[i + 1].get_field(field_name);
                 if (val_1.GetType() == typeof(string))
                 {
                     val_1 = val_1.ToString().ToLower();
@@ -155,4 +191,23 @@ public class conteiner<type> where type: certificate_class, new()
         throw new Exception($"no object with id {id}");
     }
 
+    public override string ToString()
+    {
+        var str = "";
+        foreach (var value in this)
+        {
+            if (str == "")
+                str = $"{value}";
+            else
+                str = $"{str},\n{value}";
+        }
+        return str;
+    }
+
+    public void write_to_file(string? file_path=null)
+    {
+        if (file_path == null)
+            file_path = config.output_path;
+        File.WriteAllText(file_path, this.ToString());
+    }
 }
