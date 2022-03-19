@@ -62,6 +62,12 @@ namespace Main
             conteiner.write_to_file();
         }
 
+        public static void remove(conteiner<certificate_class> conteiner)
+        {
+            Console.WriteLine("Write key to delete");
+            int key = (int)validation.validation.positive_integer(int.Parse(Console.ReadLine()));
+            conteiner.Remove(key);
+        }
         public static void print(conteiner<certificate_class> conteiner)
         {
             Console.WriteLine(conteiner.ToString());
@@ -81,11 +87,12 @@ namespace Main
                 {"add", add},
                 {"change", change},
                 {"exit", exit},
-                {"print", print}
+                {"print", print},
+                {"remove", remove}
             };
             string[] try_until_success_list =
             {
-                "search", "sort", "add", "change"
+                "search", "sort", "add", "change", "remove"
             };
             var cont = new conteiner<certificate_class>();
             var str = helping_func.seperate<string, string[]>(functions_.Keys.ToArray(),

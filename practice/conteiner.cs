@@ -75,6 +75,72 @@ public class conteiner<type> where type: certificate_class, new()
         this.start = this.start.previous;
     }
 
+    public void insert(int key, type value)
+    {
+        if (key > Length)
+            throw new KeyNotFoundException();
+        
+        if (key == 0)
+        {
+            AddFront(value);
+            return;
+        }
+        if (key == Length)
+        {
+            Add(value);
+            return;
+        }
+
+        var val = start;
+        for (int i = 0; i < key; i++)
+            val = val.next;
+        val.next = new node(previous: val, next: val.next, value: value);
+        val.next.next.previous = val.next;
+    }
+    public void RemoveBack()
+    {
+        if (end == start)
+        {
+            end = start = null;
+            return;
+        }
+
+        end = end.previous;
+    }
+
+    public void RemoveFirst()
+    {
+        if (end == start)
+        {
+            end = start = null;
+            return;
+        }
+
+        start = start.next;
+    }
+
+    public void Remove(int key)
+    {
+        if (key >= Length)
+            throw new KeyNotFoundException();
+        if (key == 0)
+        {
+            RemoveFirst();    
+            return;
+        }
+
+        if (key == Length)
+        {
+            RemoveBack();
+            return;
+        }
+
+        var val = start;
+        for (int i = 0; i <= key; i++)
+            val = val.next;
+        val.previous.next = val.next;
+        val.next.previous = val.previous;
+    }
     private void clear(node? vertex)
     {
         if(vertex == null)
