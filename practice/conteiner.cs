@@ -6,12 +6,12 @@ namespace practice;
 
 using CertificateClass;
 using config;
-public class conteiner<type> where type: certificate_class, new()
+public class conteiner<type> where type: IGetSet, new()
 {
     class iterator : IEnumerator
     {
-        private node current;
-
+        private node? current;
+        
         public iterator(node start)
         {
             current = new node();
@@ -38,7 +38,11 @@ public class conteiner<type> where type: certificate_class, new()
         public node? previous;
         public type? value;
 
-        public node(type? value=null, node? next = null, node? previous = null)
+        public node()
+        {
+            
+        }
+        public node(type? value, node? next = null, node? previous = null)
         {
             this.value = value;
             this.next = next;
@@ -105,6 +109,7 @@ public class conteiner<type> where type: certificate_class, new()
             return;
         }
 
+        end.previous.next = null;
         end = end.previous;
     }
 
@@ -129,18 +134,19 @@ public class conteiner<type> where type: certificate_class, new()
             return;
         }
 
-        if (key == Length)
+        if (key == Length - 1)
         {
             RemoveBack();
             return;
         }
 
         var val = start;
-        for (int i = 0; i <= key; i++)
+        for (int i = 0; i < key; i++)
             val = val.next;
         val.previous.next = val.next;
         val.next.previous = val.previous;
     }
+    
     private void clear(node? vertex)
     {
         if(vertex == null)
@@ -174,7 +180,11 @@ public class conteiner<type> where type: certificate_class, new()
             if (key >= this.Length)
                 throw new IndexOutOfRangeException();
             var current = start;
-            for (int i = 0; i <= key; i++)
+            
+            if (key == this.Length - 1)
+                end.value = value;
+            
+            for (int i = 0; i < key; i++)
                 current = current.next;
             current.value = value;
         }
@@ -195,7 +205,7 @@ public class conteiner<type> where type: certificate_class, new()
             {
                 var new_value = new type();
                 line++;
-                var errors = new_value.parse_from_string(text, ref line);
+                var errors = this.parse_from_string(text, ref line, new_value);
                 if (errors.Count != 0)
                 {
                     validation_functions.log_error(errors, log_file);
@@ -230,17 +240,79 @@ public class conteiner<type> where type: certificate_class, new()
             }
         }
     }
+    private string[] get_missing_data(type obj)
+    {
+        var ans = new List<string>();
+        foreach (var name in obj.get_fields_list())
+        {
+            if (obj.get_field(name) == null || obj.get_field(name).ToString() == "")
+                ans.Add(name);
+            var k = obj.get_field(name);
+        }
 
+        return ans.ToArray();
+    }
+    public List<string> parse_from_string(string[] text, ref int line, type? obj)
+    {
+        var error = new List<string>();
+        for (; line < text.Length; line++)
+        {
+            if (text[line].Trim()[0] == '}')
+                break;
+            try
+            {
+                var seperator_pos = text[line].IndexOf(':');
+                var name = text[line].Substring(0, seperator_pos).Split('"')[1];
+                var value = text[line].Substring(seperator_pos + 1).Split('"')[1];
+                obj.set_field(name, value);
+            }
+            catch (Exception e)
+            {
+                error.Add(e.Message);
+            }
+        }
+
+        var missing_data = get_missing_data(obj);
+        if (missing_data.Length > 0)
+        {
+            var message = "Missing data: ";
+            foreach (var missed in missing_data)
+                message += missed + ", ";
+            error.Add(message.Substring(0, message.Length - 2));
+        }
+
+        return error;
+    }
     public int?[] search(string value)
     {
         var ans = new List<int?>();
         for (int i = 0; i < this.Length; i++)
         {
-            if(this[i].get_missing_data().Length == 0 && this[i].have_value(value))
-                ans.Add(this[i].id);
+            if(this.get_missing_data(this[i]).Length == 0)
+                foreach (var key in this[i].get_fields_list())
+                {
+                    if (this[i].get_field(key).ToString().Contains(value))
+                    {
+                        ans.Add(this[i].id);
+                        break;
+                    }
+                }
         }
 
         return ans.ToArray();
+    }
+
+    public int get_index_by_id(int id)
+    {
+        int i = 0;
+        foreach (type val in this)
+        {
+            if (val.id == id)
+                return i;
+            i++;
+        }
+
+        throw new Exception($"there isn't object with id {id}");
     }
 
     public void change(int? id, string name, string value)
@@ -276,4 +348,5 @@ public class conteiner<type> where type: certificate_class, new()
             file_path = config.output_path;
         File.WriteAllText(file_path, this.ToString());
     }
+    
 }

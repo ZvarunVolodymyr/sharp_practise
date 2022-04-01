@@ -1,6 +1,21 @@
 namespace CertificateClass;
 
-public partial class certificate_class
+public interface IGetSet
+{
+    public int? id
+    {
+        get;
+        set;
+    }
+
+    public void set_field<T>(string name, T value);
+    
+    public object? get_field(string name);
+
+    public string[] get_fields_list();
+
+}
+public partial class certificate_class : IGetSet
 {
     private string[] field_list; 
     private Dictionary<string, Action<object?>> setters;
@@ -23,7 +38,7 @@ public partial class certificate_class
             values[name] = null;
     }
 
-    public string[] get_fields()
+    public string[] get_fields_list()
     {
         return this.field_list;
     }

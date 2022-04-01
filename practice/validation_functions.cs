@@ -49,16 +49,16 @@ static public class validation_functions
     }
     public static bool print_error<T>(Action<T> func, T value, string log_file = "")
     {
-        try
-        {
+        // try
+        // {
             func(value);
-            return true;
-        }
-        catch (Exception e)
-        {
-            if (log_file == "")
-                Console.WriteLine(e.Message);
-            return false;
-        }
+        return true;
+        // }
+        // catch (Exception e)
+        // {
+        //     if (log_file == "")
+        //         Console.WriteLine(e.Message);
+        //     return false;
+        // }
     }
 }
