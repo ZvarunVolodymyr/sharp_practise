@@ -11,7 +11,7 @@ namespace Main
 {
 // VaccinationRequest
 // certificate_class
-    using conteiner_type = VaccinationRequest;
+    using conteiner_type = certificate_class;
     public class MainMenu
     {
         public static void search(conteiner<conteiner_type> conteiner)

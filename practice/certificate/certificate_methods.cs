@@ -23,10 +23,9 @@ public partial class certificate_class
     public override string ToString()
     {
         string ans = "{\n";
-        ans += helping.helping_func.seperate<string, string[]>(this.field_list, name => 
+        ans += helping.helping_func.seperate<string, string[]>(this.field_list, name =>
             $"\t\"{name}\": \"{this.get_field(name)}\"", ",\n");
         ans += "\n}";
         return ans;
     }
-    
 }
