@@ -33,7 +33,6 @@ public class session
     static public void register(string email, string password)
     {
         var new_user = new staff() {email = email, password = password};
-
         db.add<user>(new_user);
     }
 

@@ -59,9 +59,7 @@ abstract public partial class user: IGetSet
         get => validation.exeption_if_null(password, "password");
         set
         {
-            // TODO: add hash
-            
-            password = validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+            password = helping.helping_func.getHash(validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"));
         }
     }
 }

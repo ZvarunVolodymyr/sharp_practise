@@ -1,4 +1,6 @@
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace helping;
 using System.IO;
@@ -46,4 +48,14 @@ public class helping_func
             return (T) formatter.Deserialize(ms);
         }
     }
+    
+    public static string getHash(string text)  
+    {  
+        using(var sha256 = SHA256.Create())  
+        {  
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));  
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();  
+        }  
+    }  
+
 }
