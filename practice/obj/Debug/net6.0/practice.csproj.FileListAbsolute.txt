@@ -1,0 +1,15 @@
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/practice
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/practice.deps.json
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/practice.runtimeconfig.json
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/practice.dll
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/ref/practice.dll
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/practice.pdb
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.csproj.AssemblyReference.cache
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.AssemblyInfoInputs.cache
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.AssemblyInfo.cs
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.csproj.CoreCompileInputs.cache
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.dll
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/ref/practice.dll
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.pdb
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.genruntimeconfig.cache

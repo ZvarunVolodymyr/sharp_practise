@@ -1,0 +1,27 @@
+{
+"id":"1",
+"PatientName":"John Doe",
+"PatientPhone":"+380123456789",
+"Vaccine":"Pfizer",
+"Date":"21.12.2022",
+"StartTime":"12:00:00",
+"EndTime":"13:00:00"
+},
+{
+"id":"2",
+"PatientName":"Jack Doe",
+"PatientPhone":"+380987654321",
+"Vaccine":"Moderna",
+"Date":"21.12.2022",
+"StartTime":"12:00:00",
+"EndTime":"13:00:00"
+},
+{
+"id":"3",
+"PatientName":"Dasdf Adf",
+"PatientPhone":"+380123456789",
+"Vaccine":"CoronaVac",
+"Date":"21.12.2022",
+"StartTime":"12:00:00",
+"EndTime":"13:00:00"
+}
