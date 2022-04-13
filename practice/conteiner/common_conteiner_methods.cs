@@ -2,11 +2,11 @@ using System.Collections;
 using helping;
 using validation;
 
-namespace practice;
+namespace conteiner;
 
 using CertificateClass;
 using config;
-public partial class conteiner<type> where type: IGetSet, new()
+public partial class conteiner<type> where type: IGetSet
 {
     class iterator : IEnumerator
     {

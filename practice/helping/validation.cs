@@ -56,7 +56,7 @@ public class validation
         return value;
     }
 
-    static public DateTime? date_in_range(DateTime? value, DateTime? start, DateTime? end, 
+    static public DateOnly? date_in_range(DateOnly? value, DateOnly? start, DateOnly? end, 
         string message="{0} isn't in range {1}, {2}")
     {
         if (start > end)

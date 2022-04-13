@@ -29,9 +29,9 @@ public partial class certificate_class : IGetSet
             {"username", val => this.username = val.ToString()},
             {"international_passport", val => this.international_passport = val.ToString()},
             {"vaccine_type", val => this.vaccine_type = val.ToString()},
-            {"birth_date", val => this.birth_date = Convert.ToDateTime(val)},
-            {"start_date", val => this.start_date = Convert.ToDateTime(val)},
-            {"end_date", val => this.end_date = Convert.ToDateTime(val)}
+            {"birth_date", val => this.birth_date = DateOnly.Parse(val.ToString())},
+            {"start_date", val => this.start_date = DateOnly.Parse(val.ToString())},
+            {"end_date", val => this.end_date = DateOnly.Parse(val.ToString())}
         };
         field_list = setters.Keys.ToArray();
         foreach (var name in field_list)
