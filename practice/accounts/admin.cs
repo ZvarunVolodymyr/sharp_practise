@@ -11,9 +11,6 @@ public class admin: user
 
     public void print_certificates(string? status=null)
     {
-        // var certificates_list = DB.certificate_query.filter_by("status", "draft").all();
-        
-        
         var certificate_query = session.certificate_query;
 
         if (status != null)
@@ -44,5 +41,15 @@ public class admin: user
         }
         session.db.add(certificate);
 
+    }
+
+    public void change_salary(int id, int salary)
+    {
+        var user = session.user_query.filter_by("id", id).first();
+        if (user == null || user.role != "staff")
+            throw new Exception($"You can't change salary of user with id {id}");
+        var staff_user = (staff)user;
+        staff_user.salary = salary;
+        session.db.add<user>(staff_user);
     }
 }

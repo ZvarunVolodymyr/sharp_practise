@@ -97,8 +97,8 @@ public class staff: user
         int update_count = 0;
         foreach (var key in changes.Keys)
         {
-            validation_functions.print_error(obj => certificate.set_field(key, obj), changes[key]);
-            update_count++;
+            if(validation_functions.print_error(obj => certificate.set_field(key, obj), changes[key]))
+                update_count++;
         }
         if(update_count > 0)
             certificate.updated_at = DateTime.Now;
@@ -119,21 +119,14 @@ public class staff: user
 
     public void send_to_review(int id)
     {
-        var certificate = certificates.filter_by("status", "rejected").first();
-
-        if (certificate == null)
-            throw new Exception($"you can't send for review certificate with id {id}");
-        
-        if (certificate.updated_at < certificate.rejected_at)
-            throw new Exception("you can't send for review unchanged certificate");
-
+        var certificate = get_draft_or_rejected(id);
         certificate.status = "draft";
         session.db.add(certificate);
     }
 
     public void send_all_to_reviwe()
     {
-        var certificate_list = certificates.filter_by("status", "rejected").all();
+        var certificate_list = get_draft_or_rejected();
         foreach (var certificate in certificate_list)
             if (certificate.updated_at > certificate.rejected_at)
             {

@@ -1,13 +1,28 @@
 using System.ComponentModel.DataAnnotations;
 using account;
+using helping;
 
 namespace db_imitator;
 
 using CertificateClass;
-public class session
+public partial class session
 {
     static public db_class db = new db_class();
+    
+    static public menu.menu private_menu_manager = new menu.menu();
 
+    static public menu.menu menu_manager
+    {
+        get => private_menu_manager;
+    }
+
+    static public void start_session()
+    {
+        db = new db_class();
+        private_menu_manager = new menu.menu();
+        private_user = null;
+    }
+    
     static public query<user> user_query
     {
         get => db.get_query<user>();
@@ -17,33 +32,10 @@ public class session
     {
         get => db.get_query<certificate_class>();
     }
-
-    static private user private_user;
-
     
-    static public void login(string email, string password)
-    {
-        var user = user_query.filter_by("email", email).first();
-        if (user == null || user.password != password)
-            throw new Exception("inncorrect email or password");
-        
-        private_user = user;
-    }
-
-    static public void register(string email, string password)
-    {
-        var new_user = new staff() {email = email, password = password};
-        db.add<user>(new_user);
-    }
-
     static public user user
     {
         get => private_user;
     }
-
-    public static void check_creditional(string role)
-    {
-        if (user.role != role)
-            throw new Exception("creditional error");
-    }
+    
 }

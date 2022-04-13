@@ -29,10 +29,14 @@ public partial class certificate_class
         get => private_status;
         set
         {
-            if(value == "draft")
+            if (value == "draft")
+            {
                 session.check_creditional("staff");
+                if (this.updated_at < this.rejected_at)
+                    throw new Exception("you can't send for review unchanged certificate");
+            }
             else
-                session.check_creditional("user");
+                session.check_creditional("admin");
             
             private_status = validation.validation.in_array(value, config.config.status_list);
         }

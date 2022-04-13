@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.ComTypes;
+using db_imitator;
 
 namespace validation;
 using System;
@@ -52,7 +53,7 @@ static public class validation_functions
         try
         {
             func(value);
-        return true;
+            return true;
         }
         catch (Exception e)
         {
@@ -60,5 +61,19 @@ static public class validation_functions
                 Console.WriteLine(e.Message);
             return false;
         }
+    }
+
+    public static object read_until_success(string name, Action<object?> validate)
+    {
+        object? ans = "";
+        var read_func = (string name) =>
+        {
+            Console.WriteLine($"Write down {name}");
+            string read = Console.ReadLine();
+            validate(read);
+            ans = read;
+        };
+        try_until_success(read_func, name);
+        return ans;
     }
 }

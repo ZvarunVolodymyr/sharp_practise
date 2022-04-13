@@ -1,4 +1,5 @@
 using CertificateClass;
+using db_imitator;
 
 namespace account;
 using validation;
@@ -42,18 +43,12 @@ abstract public partial class user: IGetSet
         get => validation.exeption_if_null(private_email, "email");
         set
         {
+            if (session.user_query.filter_by("email", value).first() != null && value != this.email)
+                throw new Exception("user with this email already exist");
             private_email = validation.regex_match(value, "^[a-z0-9.]+@[a-z0-9.]+.[a-z0-9.]+");
         }
     }
 
-    // public string? role
-    // {
-    //     get => validation.exeption_if_null(private_role, "role");
-    //     set
-    //     {
-    //         private_role = validation.in_array(value, config.config.user_role);
-    //     }
-    // }
     public string? password
     {
         get => validation.exeption_if_null(password, "password");
@@ -61,5 +56,10 @@ abstract public partial class user: IGetSet
         {
             password = helping.helping_func.getHash(validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"));
         }
+    }
+
+    public void menu()
+    {
+        
     }
 }
