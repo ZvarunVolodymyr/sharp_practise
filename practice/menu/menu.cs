@@ -8,7 +8,7 @@ namespace menu;
 public class menu
 {
     private Dictionary<string, Action<object>> functions_;
-    private string[] try_until_success_list;
+    private string[] try_until_success_list = new string[0];
 
     public menu()
     {
@@ -19,6 +19,7 @@ public class menu
     {
         functions_["exit"] = (_) =>
         {
+            session.db.create_dump();
             System.Environment.Exit(0);
         };
         

@@ -5,16 +5,19 @@ using db_imitator;
 namespace account;
 
 using validation;
-public class staff: user
+[Serializable]
+
+public partial class staff: user
 {
-    private int id;
     private int? private_salary;
     private DateOnly? private_first_day_in_company = DateOnly.FromDateTime(DateTime.Today);
     private List<int> certificates_id = new List<int>();
-    
-    virtual public string role
+
+    public staff() :base(){ }
+    override public string role
     {
         get => "staff";
+        set {}
     }
 
     public query<certificate_class> certificates
@@ -26,7 +29,7 @@ public class staff: user
     }
     public int? salary
     {
-        get => validation.exeption_if_null(private_salary, "salary");
+        get => private_salary;
         set
         {
             session.check_creditional("admin");

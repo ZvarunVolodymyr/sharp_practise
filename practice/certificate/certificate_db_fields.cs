@@ -1,32 +1,28 @@
 using account;
 using db_imitator;
+using helping;
+using validation;
 
 namespace CertificateClass;
 using db_imitator;
 public partial class certificate_class
 {
-    private int private_user_id;
-    private string private_status = "draft";
-    private string private_message = "";
-
-    private DateTime private_updated_at = DateTime.Now;
-    private DateTime private_rejected_at = DateTime.MinValue;
     
-    public int user_id
+    public int? user_id
     {
-        get => private_user_id;
+        get => validation.validation.exeption_if_null((int?)values["user_id"]);
         set
         {
             session.check_creditional("staff");
             if (session.user_query.filter_by("id", value).all().Count < 0)
                 throw new Exception("there is no user with this id");
-            private_user_id = value;
+            values["user_id"] = value;
         }
     }
 
-    public string status
+    public string? status
     {
-        get => private_status;
+        get => (string?)values["status"] ?? "drafted";
         set
         {
             if (value == "draft")
@@ -38,37 +34,56 @@ public partial class certificate_class
             else
                 session.check_creditional("admin");
             
-            private_status = validation.validation.in_array(value, config.config.status_list);
+            values["status"] = validation.validation.in_array(value, config.config.status_list);
         }
     }
 
-    public string message
+    public string? message
     {
-        get => private_message;
+        get => (string?)values["message"] ?? "";
         set
         {
             session.check_creditional("admin");
-            private_message = value;
+            values["message"] = value;
         }
     }
 
-    public DateTime updated_at
+    public DateTime? updated_at
     {
-        get => private_updated_at;
+        get
+        {
+            if (values["updated_at"] == null)
+                values["updated_at"] = DateTime.Now;
+            return (DateTime?) values["updated_at"];
+        }
         set
         {
             session.check_creditional("staff");
-            private_updated_at = value;
+            values["updated_at"] = value;
         }
     }
 
     public DateTime rejected_at
     {
-        get => rejected_at;
+        get => (DateTime?)values["rejected_at"] ?? DateTime.MinValue;
         set
         {
             session.check_creditional("admin");
-            rejected_at = value;
+            values["rejected_at"] = value;
         }
     }
+
+    // public Dictionary<string, string> to_dict()
+    // {
+    //     var ans = new Dictionary<string, string>();
+    //     foreach (var name in field_list)
+    //         ans[name] = get_field(name).ToString();
+    //     return ans;
+    // }
+    //
+    // public void from_dict(Dictionary<string, string> dict)
+    // {
+    //     foreach (var name in dict.Keys)
+    //         validation_functions.print_error<object>((_) => this.set_field(name, dict.Keys), null);
+    // }
 }

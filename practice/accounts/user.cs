@@ -1,8 +1,10 @@
 using CertificateClass;
 using db_imitator;
+using helping;
 
 namespace account;
 using validation;
+
 abstract public partial class user: IGetSet
 {
     private string? private_first_name;
@@ -10,10 +12,12 @@ abstract public partial class user: IGetSet
     private string? private_email;
     private string? private_role;
     private string? private_password;
-
+    
+    
     virtual public string role
     {
-        get;
+        get => "None";
+        set { }
     }
     
     public int? id
@@ -43,7 +47,7 @@ abstract public partial class user: IGetSet
         get => validation.exeption_if_null(private_email, "email");
         set
         {
-            if (session.user_query.filter_by("email", value).first() != null && value != this.email)
+            if (session.user_query.filter_by("email", value).first() != null)
                 throw new Exception("user with this email already exist");
             private_email = validation.regex_match(value, "^[a-z0-9.]+@[a-z0-9.]+.[a-z0-9.]+");
         }
@@ -51,15 +55,16 @@ abstract public partial class user: IGetSet
 
     public string? password
     {
-        get => validation.exeption_if_null(password, "password");
+        get => validation.exeption_if_null(private_password, "password");
         set
         {
-            password = helping.helping_func.getHash(validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"));
+            private_password = helping.helping_func.getHash(validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"));
         }
     }
 
-    public void menu()
+    public void complete_registration()
     {
-        
+        validation_functions.read_until_success("first name", (val) => this.first_name = val.ToString());
+        validation_functions.read_until_success("last name", (val) => this.last_name = val.ToString());
     }
 }

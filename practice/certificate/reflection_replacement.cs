@@ -1,20 +1,8 @@
+using helping;
+
 namespace CertificateClass;
 
-public interface IGetSet
-{
-    public int? id
-    {
-        get;
-        set;
-    }
 
-    public void set_field<T>(string name, T value);
-    
-    public object? get_field(string name);
-
-    public string[] get_fields_list();
-
-}
 public partial class certificate_class : IGetSet
 {
     private string[] field_list; 
@@ -31,7 +19,12 @@ public partial class certificate_class : IGetSet
             {"vaccine_type", val => this.vaccine_type = val.ToString()},
             {"birth_date", val => this.birth_date = DateOnly.Parse(val.ToString())},
             {"start_date", val => this.start_date = DateOnly.Parse(val.ToString())},
-            {"end_date", val => this.end_date = DateOnly.Parse(val.ToString())}
+            {"end_date", val => this.end_date = DateOnly.Parse(val.ToString())}, 
+            {"user_id", val => this.user_id = int.Parse(val.ToString())},
+            {"status", val => this.status = val.ToString()},
+            {"message", val => this.message = val.ToString()},
+            {"updated_at", val => this.updated_at = DateTime.Parse(val.ToString())},
+            {"rejected_at", val => this.rejected_at = DateTime.Parse(val.ToString())},
         };
         field_list = setters.Keys.ToArray();
         foreach (var name in field_list)
@@ -55,10 +48,19 @@ public partial class certificate_class : IGetSet
         if (!flag)
             throw new KeyNotFoundException($"class hasn't field {name}");
     }
-    public void set_field<T>(string name, T value)
+    public void set_field<T>(string name, T value, bool ignore_errors=false)
     {
-        field_check(name);
-        this.setters[name](value);
+        try
+        {
+            field_check(name);
+            this.setters[name](value);
+        }
+        catch (Exception e)
+        {
+            if (!ignore_errors)
+                throw e;
+        }
+        
     }
     
     public object? get_field(string name)

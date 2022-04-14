@@ -13,3 +13,5 @@
 /mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/ref/practice.dll
 /mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.pdb
 /mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.genruntimeconfig.cache
+/mnt/1/projects/sharp/practice/practice/bin/Debug/net6.0/Newtonsoft.Json.dll
+/mnt/1/projects/sharp/practice/practice/obj/Debug/net6.0/practice.csproj.CopyComplete

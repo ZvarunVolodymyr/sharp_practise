@@ -4,9 +4,12 @@ namespace account;
 
 public class admin: user
 {
+    public admin() :base(){ }
+
     override public string role
     {
         get => "admin";
+        set { }
     }
 
     public void print_certificates(string? status=null)

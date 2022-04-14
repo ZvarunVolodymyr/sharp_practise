@@ -53,7 +53,7 @@ static public class validation_functions
         try
         {
             func(value);
-            return true;
+        return true;
         }
         catch (Exception e)
         {

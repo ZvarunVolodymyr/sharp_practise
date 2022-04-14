@@ -10,12 +10,13 @@ public class query<T> where T: IGetSet
 {
     private List<T> original_list;
     private List<T> query_list;
-    private Dictionary<int, int> ids;
+    private Dictionary<int, int> ids = new Dictionary<int, int>();
     
     public query(List<T> list)
     {
         original_list = list;
-        query_list = helping_func.DeepClone(list);
+        foreach (var val in list)
+            query_list.Add(val);
         for (int i = 0; i < list.Count; i++)
             ids[i] = i;
     }
@@ -24,7 +25,10 @@ public class query<T> where T: IGetSet
     {
         var list = list_.Cast<T>().ToList();
         original_list = list;
-        query_list = helping_func.DeepClone(list);
+        query_list = new List<T>();
+        foreach (var val in list)
+            query_list.Add(val);
+            // query_list = helping_func.DeepClone(list);
         for (int i = 0; i < list.Count; i++)
             ids[i] = i;
     }

@@ -5,6 +5,8 @@ public static class config
     // GLOBAL CONFIG
     public static readonly string output_path = "ans.txt";
     public static readonly string log_path = "";
+    public static readonly string db_folder = "db_dump";
+
     
     // CLASS CONFIG
     public static readonly DateOnly birth_date = DateOnly.FromDateTime(DateTime.Now).AddYears(-200);
@@ -17,5 +19,5 @@ public static class config
     public static readonly string[] user_role = new string[]{"admin", "staff"};
     public static readonly string[] status_list = new string[]{"draft", "approved", "rejected"};
 
-
+    
 }
