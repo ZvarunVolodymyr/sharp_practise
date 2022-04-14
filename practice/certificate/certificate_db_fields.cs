@@ -32,8 +32,11 @@ public partial class certificate_class
                     throw new Exception("you can't send for review unchanged certificate");
             }
             else
+            {
+                // Console.WriteLine(session.user.role);
                 session.check_creditional("admin");
-            
+            }
+
             values["status"] = validation.validation.in_array(value, config.config.status_list);
         }
     }

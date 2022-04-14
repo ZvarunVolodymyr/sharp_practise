@@ -1,2 +1,1 @@
-{
-}
+[{"user_id":1,"status":"approved","message":"","updated_at":"2022-04-14T12:05:30.6594363+03:00","rejected_at":"0001-01-01T00:00:00","id":1,"username":"asd","international_passport":"AA123456","vaccine_type":"pfizer","birth_date":"1/1/2001","start_date":"1/1/2019","end_date":"1/1/2020"}]

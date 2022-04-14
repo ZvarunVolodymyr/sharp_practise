@@ -29,9 +29,17 @@ public class db_class
     {
         string name = typeof(T).Name;
         
-        if (new query<T>(get_list<T>()).filter_by("id", obj.id).first() != null)
+        if (obj.id != null && new query<T>(get_list<T>()).filter_by("id", obj.id).first() != null)
             models[name].Remove(obj);
         
+        models[name].Add(obj);
+        commit();
+    }
+
+    private void add(object? obj, Type T)
+    {
+        get_list(T);
+        string name = T.Name;
         models[name].Add(obj);
     }
 
@@ -46,11 +54,19 @@ public class db_class
 
         foreach (var val in to_delete)
             models[name].Remove(val);
+        commit();
     }
 
     private List<object?> get_list<T>()
     {
         string name = typeof(T).Name;
+        if (!models.ContainsKey(name))
+            models[name] = new List<object?>();
+        return models[name];
+    }
+    private List<object?> get_list(Type T)
+    {
+        string name = T.Name;
         if (!models.ContainsKey(name))
             models[name] = new List<object?>();
         return models[name];
@@ -61,6 +77,10 @@ public class db_class
         return new query<T>(get_list<T>());
     }
 
+    public void commit()
+    {
+        create_dump();
+    }
     public void create_dump()
     {
         string folder_name = config.config.db_folder;
@@ -103,13 +123,11 @@ public class db_class
         
             Type cur_type = type;
                 
-            var method_info = typeof(db_class).GetMethod("add");
-            var method = method_info.MakeGenericMethod(type);
             foreach (var data in items)
             {
                 if (type == typeof(user))
                 {
-                    if (data["role"] == "staff")
+                    if (data["role"].ToString() == "staff")
                         cur_type = typeof(staff);
                     else
                         cur_type = typeof(admin);
@@ -117,10 +135,15 @@ public class db_class
                 }
 
                 var new_obj =  (IGetSet)Activator.CreateInstance(cur_type);
+                
+                
+                session.system = true;
                 foreach (var key in data.Keys)
                     new_obj.set_field(key, data[key], true);
-                method.Invoke(this, new object[] {new_obj});
+                session.system = false;
+                this.add(new_obj, type);
             }
         }
+
     }
 }

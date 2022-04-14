@@ -12,8 +12,7 @@ abstract public partial class user: IGetSet
     private string? private_email;
     private string? private_role;
     private string? private_password;
-    
-    
+
     virtual public string role
     {
         get => "None";
@@ -58,7 +57,7 @@ abstract public partial class user: IGetSet
         get => validation.exeption_if_null(private_password, "password");
         set
         {
-            private_password = helping.helping_func.getHash(validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"));
+            private_password = validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
         }
     }
 
@@ -66,5 +65,20 @@ abstract public partial class user: IGetSet
     {
         validation_functions.read_until_success("first name", (val) => this.first_name = val.ToString());
         validation_functions.read_until_success("last name", (val) => this.last_name = val.ToString());
+    }
+
+    protected virtual string[] to_string_list_field()
+    {
+        return this.get_fields_list();
+    }
+    public override string ToString()
+    {
+        string s = "";
+        foreach (var key in to_string_list_field())
+        {
+            s += $"{key}: {get_field(key)}";
+        }
+
+        return s;
     }
 }

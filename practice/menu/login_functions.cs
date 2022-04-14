@@ -17,7 +17,6 @@ public class login_functions
         session.login(email, password);
 
         var user_role = session.user.role;
-        Console.WriteLine(user_role);
         if (user_role == "admin")
             session.menu_manager.admin();
         if (user_role == "staff")

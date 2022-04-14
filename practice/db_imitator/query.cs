@@ -35,7 +35,7 @@ public class query<T> where T: IGetSet
 
     public query<T> filter_by(string field, object? value)
     {
-        return filter(obj => obj.get_field(field).Equals(value));
+        return filter(obj => value.Equals(obj.get_field(field)));
     }
 
     public query<T> filter(Func<T, bool> check)
@@ -44,6 +44,7 @@ public class query<T> where T: IGetSet
         for (int i = 0; i < query_list.Count; i++)
         {
             var val = query_list[i];
+            // Console.WriteLine($" HERE {val.get_field("email")}");
             if (check(val))
             {
                 int id = ids[i];

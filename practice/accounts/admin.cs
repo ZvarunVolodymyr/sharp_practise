@@ -4,12 +4,11 @@ namespace account;
 
 public class admin: user
 {
-    public admin() :base(){ }
+    // public admin() :base(){ }
 
     override public string role
     {
         get => "admin";
-        set { }
     }
 
     public void print_certificates(string? status=null)
@@ -31,7 +30,8 @@ public class admin: user
     public void change_status(int id, bool status, string message = "")
     {
         var certificate = session.certificate_query.filter_by("id", id).first();
-        if (certificate == null || certificate.status != "draft")
+        // Console.WriteLine(certificate.status);
+        if (certificate == null || certificate.status != "drafted")
             throw new Exception($"You can't change status of certificate with id {id}");
 
         if (status)

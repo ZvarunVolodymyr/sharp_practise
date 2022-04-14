@@ -20,10 +20,10 @@ public class admin_functions
     public static void change_status()
     {
         var admin_user = (admin)session.check_creditional("admin");
-        var id = (int) validation_functions.read_until_success("id", (obj) =>
+        var id = int.Parse( validation_functions.read_until_success("id", (obj) =>
         {
-            validation.validation.positive_integer(Convert.ToInt32(obj));
-        });
+            validation.validation.positive_integer(int.Parse(obj.ToString()));
+        }).ToString());
         
         var status_name = (string)validation_functions.read_until_success("status", (obj) =>
         {

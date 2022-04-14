@@ -37,5 +37,11 @@ public partial class session
     {
         get => private_user;
     }
+
+    static public bool system
+    {
+        get;
+        set;
+    }
     
 }

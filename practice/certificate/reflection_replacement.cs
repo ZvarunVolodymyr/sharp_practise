@@ -13,7 +13,7 @@ public partial class certificate_class : IGetSet
     {
         setters = new Dictionary<string, Action<object?>>()
         {
-            {"id", val => this.id = Convert.ToInt32(val)},
+            {"id", val => this.id = int.Parse(val.ToString())},
             {"username", val => this.username = val.ToString()},
             {"international_passport", val => this.international_passport = val.ToString()},
             {"vaccine_type", val => this.vaccine_type = val.ToString()},
@@ -26,33 +26,26 @@ public partial class certificate_class : IGetSet
             {"updated_at", val => this.updated_at = DateTime.Parse(val.ToString())},
             {"rejected_at", val => this.rejected_at = DateTime.Parse(val.ToString())},
         };
-        field_list = setters.Keys.ToArray();
-        foreach (var name in field_list)
+        var temp = setters.Keys.ToList();
+        foreach (var name in temp)
             values[name] = null;
+        temp.Remove("user_id");
+        temp.Remove("status");
+        temp.Remove("updated_at");
+        temp.Remove("rejected_at");
+        temp.Remove("message");
+        field_list = temp.ToArray();
+        
     }
 
     public string[] get_fields_list()
     {
         return this.field_list;
     }
-    private void field_check(string name)
-    {
-        bool flag = false;
-        foreach (var field in field_list)
-            if (name == field)
-            {
-                flag = true;
-                break;
-            }
-
-        if (!flag)
-            throw new KeyNotFoundException($"class hasn't field {name}");
-    }
     public void set_field<T>(string name, T value, bool ignore_errors=false)
     {
         try
         {
-            field_check(name);
             this.setters[name](value);
         }
         catch (Exception e)
@@ -65,7 +58,6 @@ public partial class certificate_class : IGetSet
     
     public object? get_field(string name)
     {
-        field_check(name);
         return this.values[name];
     }
 }

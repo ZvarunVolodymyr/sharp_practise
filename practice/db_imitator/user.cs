@@ -13,10 +13,8 @@ public partial class session
     {
         var user = user_query.filter_by("email", email).first();
         password = helping_func.getHash(password);
-        
         if (user == null || user.password != password)
             throw new Exception("inncorrect email or password");
-        Console.WriteLine(user.role);
         private_user = user;
     }
 
@@ -28,7 +26,7 @@ public partial class session
     }
     static public void register(string email, string password)
     {
-        var new_user = new staff() {email = email, password = password};
+        var new_user = new staff() {email = email, password = helping_func.getHash(password)};
         var list = user_query.all();
         if (list.Count == 0)
             new_user.id = 1;
@@ -40,7 +38,10 @@ public partial class session
     }
     public static user check_creditional(string role)
     {
-        if (user == null || user.role != role)
+        if (system)
+            return user;
+        
+        if (user == null || user.role != role && user.role != "system")
             throw new Exception("creditional error");
         return user;
     }

@@ -5,7 +5,6 @@ using db_imitator;
 namespace account;
 
 using validation;
-[Serializable]
 
 public partial class staff: user
 {
@@ -13,18 +12,26 @@ public partial class staff: user
     private DateOnly? private_first_day_in_company = DateOnly.FromDateTime(DateTime.Today);
     private List<int> certificates_id = new List<int>();
 
-    public staff() :base(){ }
+    public staff() : base()
+    {
+    }
     override public string role
     {
         get => "staff";
-        set {}
     }
 
     public query<certificate_class> certificates
     {
         get
         {
-            return session.certificate_query.filter(obj => certificates_id.Contains((int)obj.id));
+            return session.certificate_query.filter(obj =>
+            {
+                var id_ = (int?) obj.get_field("id");
+                // Console.WriteLine(obj);
+                if (id_ == null)
+                    return false;
+                return (int?)obj.get_field("user_id") == this.id;
+            });
         }
     }
     public int? salary
@@ -156,4 +163,5 @@ public partial class staff: user
             session.db.remove(val);
         }
     }
+    
 }
