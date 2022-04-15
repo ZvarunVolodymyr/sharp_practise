@@ -1,6 +1,8 @@
+using System.Text.Json;
 using CertificateClass;
 using db_imitator;
 using helping;
+using practice.helping;
 
 namespace account;
 using validation;
@@ -67,18 +69,10 @@ abstract public partial class user: IGetSet
         validation_functions.read_until_success("last name", (val) => this.last_name = val.ToString());
     }
 
-    protected virtual string[] to_string_list_field()
-    {
-        return this.get_fields_list();
-    }
     public override string ToString()
     {
-        string s = "";
-        foreach (var key in to_string_list_field())
-        {
-            s += $"{key}: {get_field(key)}";
-        }
-
-        return s;
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web){WriteIndented = true};
+        options.Converters.Add(new custom_serializer.DateOnlySerializer());
+        return JsonSerializer.Serialize(this, options);
     }
 }

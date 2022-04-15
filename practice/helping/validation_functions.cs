@@ -31,7 +31,6 @@ static public class validation_functions
     }
 
 
-    // DON'T KNOW HOW TO WRITE THIS NOW
     
     public static void try_until_success<T>(Action<T> func, T parametr)
     {
@@ -57,8 +56,19 @@ static public class validation_functions
         }
         catch (Exception e)
         {
+            string s = "+++++++++++++++++++++++++++++\n";
+            s += e.Message + '\n';
+            s += "+++++++++++++++++++++++++++++\n";
             if (log_file == "")
-                Console.WriteLine(e.Message);
+                Console.WriteLine(s);
+            else
+            {
+                using (var file = File.AppendText(log_file))
+                {
+                    file.Write(s);
+                }
+            }
+
             return false;
         }
     }

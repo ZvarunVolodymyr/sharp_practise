@@ -15,8 +15,7 @@ public class query<T> where T: IGetSet
     public query(List<T> list)
     {
         original_list = list;
-        foreach (var val in list)
-            query_list.Add(val);
+        query_list = helping_func.ListClone(list);
         for (int i = 0; i < list.Count; i++)
             ids[i] = i;
     }
@@ -25,10 +24,7 @@ public class query<T> where T: IGetSet
     {
         var list = list_.Cast<T>().ToList();
         original_list = list;
-        query_list = new List<T>();
-        foreach (var val in list)
-            query_list.Add(val);
-            // query_list = helping_func.DeepClone(list);
+        query_list = helping_func.ListClone(list);
         for (int i = 0; i < list.Count; i++)
             ids[i] = i;
     }
@@ -44,7 +40,6 @@ public class query<T> where T: IGetSet
         for (int i = 0; i < query_list.Count; i++)
         {
             var val = query_list[i];
-            // Console.WriteLine($" HERE {val.get_field("email")}");
             if (check(val))
             {
                 int id = ids[i];
@@ -73,6 +68,11 @@ public class query<T> where T: IGetSet
         if (query_list.Count == 0)
             return default(T?);
         return query_list[0];
+    }
+
+    public T? get(int id)
+    {
+        return this.filter_by("id", id).first();
     }
 
 }

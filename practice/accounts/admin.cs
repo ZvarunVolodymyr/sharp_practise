@@ -4,7 +4,6 @@ namespace account;
 
 public class admin: user
 {
-    // public admin() :base(){ }
 
     override public string role
     {
@@ -29,9 +28,8 @@ public class admin: user
 
     public void change_status(int id, bool status, string message = "")
     {
-        var certificate = session.certificate_query.filter_by("id", id).first();
-        // Console.WriteLine(certificate.status);
-        if (certificate == null || certificate.status != "drafted")
+        var certificate = session.certificate_query.get(id);
+        if (certificate == null || certificate.status != "draft")
             throw new Exception($"You can't change status of certificate with id {id}");
 
         if (status)
@@ -48,11 +46,12 @@ public class admin: user
 
     public void change_salary(int id, int salary)
     {
-        var user = session.user_query.filter_by("id", id).first();
+        var user = session.user_query.get(id);
         if (user == null || user.role != "staff")
             throw new Exception($"You can't change salary of user with id {id}");
         var staff_user = (staff)user;
         staff_user.salary = salary;
         session.db.add<user>(staff_user);
     }
+    
 }

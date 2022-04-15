@@ -41,24 +41,13 @@ public class helping_func
 
         return ans;
     }
-    // public static T DeepClone<T>(T obj)
-    // {
-    //     using (var ms = new MemoryStream())
-    //     {
-    //         var formatter = new BinaryFormatter();
-    //         formatter.Serialize(ms, obj);
-    //         ms.Position = 0;
-    //
-    //         return (T) formatter.Deserialize(ms);
-    //     }
-    // }
-    public static T DeepClone<T>(T source)
-    {
-        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-        options.Converters.Add(new custom_serializer.DateOnlySerializer());
 
-        var serialized = JsonSerializer.Serialize(source, options);
-        return JsonSerializer.Deserialize<T>(serialized);
+    public static List<T> ListClone<T>(List<T> source)
+    {
+        var ans = new List<T>();
+        foreach (var value in source)
+            ans.Add(value);
+        return ans;
     }
     public static string getHash(string text)  
     {  

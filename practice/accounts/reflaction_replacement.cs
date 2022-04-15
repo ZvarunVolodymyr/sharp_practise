@@ -5,11 +5,6 @@ namespace account;
 
 public partial class user
 {
-    public user()
-    {
-
-    }
-    
     private static Dictionary<string, Action<user, object?>> setters = new Dictionary<string, Action<user, object?>>()
     {
         {"id", (obj, val) => obj.id = int.Parse(val.ToString())},
@@ -64,7 +59,6 @@ public partial class staff
         {"password", (obj, val) => obj.password = val.ToString()},
         {"salary", (obj, val) => obj.salary = int.Parse(val.ToString())},
         {"first_day_in_company", (obj, val) => {}}, 
-        {"certificates_id", (obj, val) => obj.certificates_id = ((List<object>)val).Cast<int>().ToList()}
     };
 
     override public object? get_field(string name)
@@ -79,7 +73,6 @@ public partial class staff
             {"password", ()=>this.password},
             {"salary", ()=>this.salary},
             {"first_day_in_company", ()=>this.first_day_in_company},
-            {"certificates_id", ()=>this.certificates_id},
         }[name]();
     }
 }

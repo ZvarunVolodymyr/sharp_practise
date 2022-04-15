@@ -17,9 +17,3 @@ public interface IGetSet
     public string[] get_fields_list();
 
 }
-
-// public interface Serializable
-// {
-//     public Dictionary<string, string> to_dict();
-//     public void from_dict(Dictionary<string, string> dict);
-// }

@@ -1,6 +1,8 @@
+using System.Text.Json;
 using CertificateClass;
 using conteiner;
 using db_imitator;
+using practice.helping;
 
 namespace account;
 
@@ -10,11 +12,8 @@ public partial class staff: user
 {
     private int? private_salary;
     private DateOnly? private_first_day_in_company = DateOnly.FromDateTime(DateTime.Today);
-    private List<int> certificates_id = new List<int>();
 
-    public staff() : base()
-    {
-    }
+    
     override public string role
     {
         get => "staff";
@@ -26,10 +25,6 @@ public partial class staff: user
         {
             return session.certificate_query.filter(obj =>
             {
-                var id_ = (int?) obj.get_field("id");
-                // Console.WriteLine(obj);
-                if (id_ == null)
-                    return false;
                 return (int?)obj.get_field("user_id") == this.id;
             });
         }
@@ -53,30 +48,31 @@ public partial class staff: user
     {
         var ans = new certificate_class();
         ans.read_from_console();
-        while (session.certificate_query.filter_by("id", ans.id).first() != null)
-        {
-            Console.WriteLine($"id {ans.id} already in use");
-            validation_functions.try_until_success((obj) => ans.set_field("id", obj), Console.ReadLine());
-        }
 
         ans.user_id = this.id;
-        this.certificates_id.Add((int)ans.id);
         session.db.add(ans);
+        Console.WriteLine(ans);
     }
 
     public void print_certificate(string? status = null)
     {
         var certificate_query = certificates;
-
-        if (status != null)
+        List<certificate_class> certificates_list;
+        if (status != null && config.config.status_list.Contains(status))
         {
             if (status == "approved")
                 certificate_query = session.certificate_query;
-            
+
             certificate_query = certificate_query.filter_by("status", status);
+            certificates_list = certificate_query.all();
+        }
+        else
+        {
+            Console.WriteLine("Inncorect status, get draft or rejected");
+            certificates_list = get_draft_or_rejected();
         }
 
-        var certificates_list = certificate_query.all();
+        Console.WriteLine("----------------------------------------------------------------------------------");
         foreach (var certificate in certificates_list)
         {
             Console.WriteLine(certificate);
@@ -86,8 +82,7 @@ public partial class staff: user
 
     public certificate_class get_draft_or_rejected(int id)
     {
-        var certificate = certificates.filter_by("id", id)
-            .filter((obj => new string[]{"draft", "rejected"}.Contains(obj.status))).first();
+        var certificate = certificates.filter((obj => new string[]{"draft", "rejected"}.Contains(obj.status))).get(id);
         if (certificate == null)
             throw new Exception($"STAFF with id {this.id} can't change certificate with id {id}");
         return certificate;
@@ -107,6 +102,7 @@ public partial class staff: user
         int update_count = 0;
         foreach (var key in changes.Keys)
         {
+            Console.WriteLine(key);
             if(validation_functions.print_error(obj => certificate.set_field(key, obj), changes[key]))
                 update_count++;
         }
@@ -147,21 +143,24 @@ public partial class staff: user
     }
     public void remove(int id)
     {
-        var certificate = certificates.filter_by("id", id).filter_by("status", "draft").first();
+        var certificate = get_draft_or_rejected(id);
         if (certificate == null)
             throw new Exception($"STAFF with id {this.id} can't remove certificate with id {id}");
-        this.certificates_id.Remove((int)certificate.id);
         session.db.remove(certificate);
     }
 
     public void remove_all()
     {
-        var certificate_list = certificates.filter_by("id", id).filter_by("status", "draft").all();
+        var certificate_list = certificates.filter_by("status", "draft").all();
         foreach (var val in certificate_list)
         {
-            this.certificates_id.Remove((int)val.id);
             session.db.remove(val);
         }
     }
-    
+    public override string ToString()
+    {
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web){WriteIndented = true};
+        options.Converters.Add(new custom_serializer.DateOnlySerializer());
+        return JsonSerializer.Serialize(this, options);
+    }
 }

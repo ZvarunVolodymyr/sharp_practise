@@ -19,18 +19,24 @@ public class menu
     {
         functions_["exit"] = (_) =>
         {
-            session.db.create_dump();
-            System.Environment.Exit(0);
+            Console.WriteLine("Commit changes? (y/n)");
+            string flag = (string)validation.validation_functions.read_until_success("y or n",
+                (obj) => validation.validation.in_array(((string)obj).Trim().ToLower(), new []{"y", "n"}));
+            if(flag == "y")
+                session.db.commit();
+            
+            Environment.Exit(0);
         };
-        
         var str = helping_func.seperate<string, string[]>(functions_.Keys.ToArray(),
             name => name.Replace('_', ' '));
         
         Start:
+        Console.WriteLine("======================================================");
         Console.WriteLine($"Choose what to do\n{str}");
         try
         {
             string command_name = Console.ReadLine().ToLower();
+            Console.WriteLine();
             foreach (var val in try_until_success_list)
                 if (command_name == val)
                 {
@@ -43,7 +49,7 @@ public class menu
         }
         catch (KeyNotFoundException e)
         {
-            Console.WriteLine($"incorrect command, {e}");
+            Console.WriteLine($"incorrect command, {e.Message}");
             goto Start;
         }
     }
@@ -72,8 +78,10 @@ public class menu
             {"send all to review", (_) => {staff_functions.send_all_to_review();}},
             {"remove", (_) => {staff_functions.remove();}},
             {"remove all", (_) => {staff_functions.remove_all();}},
+            {"commit", (_) => session.db.commit()},
+            {"revert", (_) => session.db.revert()},
         };
-        try_until_success_list = new[]
+            try_until_success_list = new[]
             { "" };
     }
 
@@ -85,7 +93,10 @@ public class menu
             {"logout", login_functions.logout},
             {"get certificate", (_) => {admin_functions.get_certificate();}},
             {"change status", (_) => {admin_functions.change_status();}},
-            {"change salary", (_) => {admin_functions.change_salary();}}
+            {"change salary", (_) => {admin_functions.change_salary();}},
+            {"staff users", (_) => admin_functions.get_staff_users()},
+            {"commit", (_) => session.db.commit()},
+            {"revert", (_) => session.db.revert()},
         };
         try_until_success_list = new[]
             { "" };

@@ -6,8 +6,6 @@ using helping;
 using Newtonsoft.Json;
 using practice.helping;
 
-// using Formatting = System.Xml.Formatting;
-
 namespace db_imitator;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,6 +13,7 @@ using System.Text.Json.Serialization;
 public class db_class
 {
     private Dictionary<string, List<object?>> models = new Dictionary<string, List<object?>>();
+    private List<Type> types = new List<Type>();
     
     public List<T> get_data<T>()
     {
@@ -29,18 +28,19 @@ public class db_class
     {
         string name = typeof(T).Name;
         
-        if (obj.id != null && new query<T>(get_list<T>()).filter_by("id", obj.id).first() != null)
+        if (obj.id != null && new query<T>(get_list<T>()).get((int)obj.id) != null)
             models[name].Remove(obj);
         
         models[name].Add(obj);
-        commit();
     }
 
-    private void add(object? obj, Type T)
+    private void add(object? input_obj, Type T)
     {
-        get_list(T);
         string name = T.Name;
-        models[name].Add(obj);
+        var id = (int)((IGetSet) input_obj).id;
+        if (id != null && new query<IGetSet>(get_list(T)).get(id) != null)
+            models[name].Remove(input_obj);
+        models[name].Add(input_obj);
     }
 
     public void remove<T>(T obj) where T : IGetSet
@@ -54,21 +54,21 @@ public class db_class
 
         foreach (var val in to_delete)
             models[name].Remove(val);
-        commit();
     }
 
     private List<object?> get_list<T>()
     {
-        string name = typeof(T).Name;
-        if (!models.ContainsKey(name))
-            models[name] = new List<object?>();
-        return models[name];
+        return get_list(typeof(T));
     }
     private List<object?> get_list(Type T)
     {
         string name = T.Name;
         if (!models.ContainsKey(name))
+        {
             models[name] = new List<object?>();
+            types.Add(T);
+        }
+
         return models[name];
     }
 
@@ -76,10 +76,14 @@ public class db_class
     {
         return new query<T>(get_list<T>());
     }
-
     public void commit()
     {
         create_dump();
+    }
+
+    public void revert()
+    {
+        load_dump(this.types.ToArray());
     }
     public void create_dump()
     {
@@ -88,7 +92,7 @@ public class db_class
         foreach (var model in keys)
         {
             string path = folder_name + $"/{model}.json";
-            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web){WriteIndented = true};
             options.Converters.Add(new custom_serializer.DateOnlySerializer());
             using (StreamWriter sw = new StreamWriter(path))
             {
@@ -100,7 +104,7 @@ public class db_class
     public void load_dump(Type[] models_types)
     {
         this.models = new Dictionary<string, List<object?>>();
-        
+        this.types = new List<Type>();
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         options.Converters.Add(new custom_serializer.DateOnlySerializer());
         foreach (var type in models_types)

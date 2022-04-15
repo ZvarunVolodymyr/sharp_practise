@@ -26,7 +26,7 @@ public class staff_functions
             Console.WriteLine("Write value");
             var value = Console.ReadLine().Trim();
 
-            changes["fields"] = value;
+            changes[field] = value;
         }
 
         return changes;
@@ -35,10 +35,12 @@ public class staff_functions
     public static void update_certificate()
     {
         var staff_user = (staff)session.check_creditional("staff");
-        var id = (int) validation_functions.read_until_success("id", (obj) =>
+        var id = int.Parse((string) validation_functions.read_until_success("id", (obj) =>
         {
-            validation.validation.positive_integer(Convert.ToInt32(obj));
-        });
+            int id_ = (int)validation.validation.positive_integer(int.Parse(obj.ToString()));
+            if (session.certificate_query.get(id_) == null)
+                throw new Exception("There isn't certificate with such id");
+        }));
 
         staff_user.get_draft_or_rejected(id);
         staff_user.update_certificate(id, print_changes());
@@ -54,11 +56,9 @@ public class staff_functions
     public static void get_certificate()
     {
         var staff_user = (staff)session.check_creditional("staff");
-
-        var status = (string)validation_functions.read_until_success("status", (obj) =>
-        {
-            validation.validation.in_array(obj, config.config.status_list);
-        });
+        
+        Console.WriteLine("Write down status");
+        var status = Console.ReadLine();
         staff_user.print_certificate(status);
 
     }
@@ -66,10 +66,12 @@ public class staff_functions
     public static void send_to_review()
     {
         var staff_user = (staff)session.check_creditional("staff");
-        var id = (int) validation_functions.read_until_success("id", (obj) =>
+        var id = int.Parse((string)validation_functions.read_until_success("id", (obj) =>
         {
-            validation.validation.positive_integer(Convert.ToInt32(obj));
-        });
+            int id_ = (int)validation.validation.positive_integer(int.Parse(obj.ToString()));
+            if (session.certificate_query.get(id_) == null)
+                throw new Exception("There isn't certificate with such id");
+        }));
         
         staff_user.send_to_review(id);
     }
@@ -84,10 +86,10 @@ public class staff_functions
     public static void remove()
     {
         var staff_user = (staff)session.check_creditional("staff");
-        var id = (int) validation_functions.read_until_success("id", (obj) =>
+        var id = int.Parse((string)validation_functions.read_until_success("id", (obj) =>
         {
             validation.validation.positive_integer(Convert.ToInt32(obj));
-        });
+        }));
         
         staff_user.remove(id);
     }

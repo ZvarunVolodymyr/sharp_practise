@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
+using db_imitator;
 
 namespace CertificateClass;
 using config;
@@ -12,6 +13,11 @@ public partial class certificate_class
     public certificate_class()
     {
         this.create_fields();
+        session.system = true;
+        this.status = "draft";
+        this.rejected_at = DateTime.MinValue;
+        this.updated_at = DateTime.Now;
+        session.system = false;
     }
     public string[] get_missing_data()
     {
@@ -26,7 +32,10 @@ public partial class certificate_class
         get => (int?)values["id"];
         set
         {
-            values["id"] = validation.positive_integer(value);
+            int? id_ = validation.positive_integer(value);
+            if (session.certificate_query.get((int) value) != null)
+                throw new Exception($"Certificate with {id_} already exist");
+            values["id"] = id_;
         }
     }
 

@@ -14,7 +14,7 @@ public partial class certificate_class
         set
         {
             session.check_creditional("staff");
-            if (session.user_query.filter_by("id", value).all().Count < 0)
+            if (session.user_query.get((int)value) == null)
                 throw new Exception("there is no user with this id");
             values["user_id"] = value;
         }
@@ -22,7 +22,7 @@ public partial class certificate_class
 
     public string? status
     {
-        get => (string?)values["status"] ?? "drafted";
+        get => (string?)values["status"] ?? "draft";
         set
         {
             if (value == "draft")
@@ -32,10 +32,7 @@ public partial class certificate_class
                     throw new Exception("you can't send for review unchanged certificate");
             }
             else
-            {
-                // Console.WriteLine(session.user.role);
                 session.check_creditional("admin");
-            }
 
             values["status"] = validation.validation.in_array(value, config.config.status_list);
         }
@@ -68,25 +65,11 @@ public partial class certificate_class
 
     public DateTime rejected_at
     {
-        get => (DateTime?)values["rejected_at"] ?? DateTime.MinValue;
+        get => (DateTime?) values["rejected_at"] ?? DateTime.MinValue;
         set
         {
             session.check_creditional("admin");
             values["rejected_at"] = value;
         }
     }
-
-    // public Dictionary<string, string> to_dict()
-    // {
-    //     var ans = new Dictionary<string, string>();
-    //     foreach (var name in field_list)
-    //         ans[name] = get_field(name).ToString();
-    //     return ans;
-    // }
-    //
-    // public void from_dict(Dictionary<string, string> dict)
-    // {
-    //     foreach (var name in dict.Keys)
-    //         validation_functions.print_error<object>((_) => this.set_field(name, dict.Keys), null);
-    // }
 }
