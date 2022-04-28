@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CertificateClass;
 using db_imitator;
 using helping;
@@ -13,7 +14,7 @@ abstract public partial class user: IGetSet
     private string? private_last_name;
     private string? private_email;
     private string? private_role;
-    private string? private_password;
+    protected string? private_password;
 
     virtual public string role
     {
@@ -53,10 +54,10 @@ abstract public partial class user: IGetSet
             private_email = validation.regex_match(value, "^[a-z0-9.]+@[a-z0-9.]+.[a-z0-9.]+");
         }
     }
-
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? password
     {
-        get => validation.exeption_if_null(private_password, "password");
+        get => private_password;
         set
         {
             private_password = validation.regex_match(value, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");

@@ -159,8 +159,12 @@ public partial class staff: user
     }
     public override string ToString()
     {
+        var pass = password;
+        this.private_password = null;
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web){WriteIndented = true};
         options.Converters.Add(new custom_serializer.DateOnlySerializer());
-        return JsonSerializer.Serialize(this, options);
+        var ans = JsonSerializer.Serialize(this, options);
+        this.private_password = pass;
+        return ans;
     }
 }
