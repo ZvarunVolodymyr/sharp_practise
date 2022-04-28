@@ -22,7 +22,7 @@ public class certificate_controller: ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody]Certificate new_certificate)
+    public async Task<IActionResult> Post([FromBody]CertificateWithoutId new_certificate)
     {
         if (ModelState.IsValid)  
         {    
@@ -41,7 +41,7 @@ public class certificate_controller: ControllerBase
         return Ok(ans);
     }
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> detail_put(int id, [FromBody]Certificate update_certificate)
+    public async Task<IActionResult> detail_put(int id, [FromBody]CertificateWithoutId update_certificate)
     {
         var ans = _context.Certificates.FirstOrDefault(obj => obj.id == id);
         
