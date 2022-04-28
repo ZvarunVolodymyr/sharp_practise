@@ -1,0 +1,30 @@
+[
+  {
+    "user_id": 1,
+    "status": "approved",
+    "message": "",
+    "updated_at": "2022-04-15T18:04:26.3396515+03:00",
+    "rejected_at": "0001-01-01T00:00:00",
+    "id": 1,
+    "username": "asd",
+    "international_passport": "AB123456",
+    "vaccine_type": "pfizer",
+    "birth_date": "1/1/2001",
+    "start_date": "1/1/2019",
+    "end_date": "1/1/2020"
+  },
+  {
+    "user_id": 1,
+    "status": "rejected",
+    "message": "change username",
+    "updated_at": "2022-04-15T18:54:17.3436201+03:00",
+    "rejected_at": "2022-04-15T18:56:15.3548639+03:00",
+    "id": 2,
+    "username": "asd",
+    "international_passport": "AB123456",
+    "vaccine_type": "pfizer",
+    "birth_date": "1/1/2001",
+    "start_date": "1/1/2019",
+    "end_date": "1/1/2020"
+  }
+]

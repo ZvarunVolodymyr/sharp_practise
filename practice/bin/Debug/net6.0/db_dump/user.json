@@ -1,0 +1,32 @@
+[
+  {
+    "role": "staff",
+    "certificates": {},
+    "salary": null,
+    "first_day_in_company": "4/15/2022",
+    "id": 1,
+    "first_name": "Name",
+    "last_name": "Name",
+    "email": "staff@mail.ua",
+    "password": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "role": "admin",
+    "id": 2,
+    "first_name": "admin",
+    "last_name": "admin",
+    "email": "admin@mail.ua",
+    "password": "3b612c75a7b5048a435fb6ec81e52ff92d6d795a8b5a9c17070f6a63c97a53b2"
+  },
+  {
+    "role": "staff",
+    "certificates": {},
+    "salary": null,
+    "first_day_in_company": "4/15/2022",
+    "id": 3,
+    "first_name": "test name",
+    "last_name": "test last name",
+    "email": "test@mail.ua",
+    "password": "07480fb9e85b9396af06f006cf1c95024af2531c65fb505cfbd0add1e2f31573"
+  }
+]

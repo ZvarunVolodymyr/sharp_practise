@@ -1,5 +1,13 @@
-namespace helping;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using account;
+using practice.helping;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
+namespace helping;
+using System.IO;
 public class helping_func
 {
     static public T max_or_not_null<T>(T first, T second) where T: IComparable
@@ -8,7 +16,7 @@ public class helping_func
             return second;
         return first;
     }
-    static public DateTime? max_or_not_null(DateTime? first, DateTime? second)
+    static public DateOnly? max_or_not_null(DateOnly? first, DateOnly? second)
     {
         if (first == null || second != null && second > first)
             return second;
@@ -33,4 +41,21 @@ public class helping_func
 
         return ans;
     }
+
+    public static List<T> ListClone<T>(List<T> source)
+    {
+        var ans = new List<T>();
+        foreach (var value in source)
+            ans.Add(value);
+        return ans;
+    }
+    public static string getHash(string text)  
+    {  
+        using(var sha256 = SHA256.Create())  
+        {  
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));  
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();  
+        }  
+    }  
+
 }

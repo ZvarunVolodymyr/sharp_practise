@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.ComTypes;
+using db_imitator;
 
 namespace validation;
 using System;
@@ -30,7 +31,6 @@ static public class validation_functions
     }
 
 
-    // DON'T KNOW HOW TO WRITE THIS NOW
     
     public static void try_until_success<T>(Action<T> func, T parametr)
     {
@@ -52,13 +52,38 @@ static public class validation_functions
         try
         {
             func(value);
-        return true;
+            return true;
         }
         catch (Exception e)
         {
+            string s = "+++++++++++++++++++++++++++++\n";
+            s += e.Message + '\n';
+            s += "+++++++++++++++++++++++++++++\n";
             if (log_file == "")
-                Console.WriteLine(e.Message);
+                Console.WriteLine(s);
+            else
+            {
+                using (var file = File.AppendText(log_file))
+                {
+                    file.Write(s);
+                }
+            }
+
             return false;
         }
+    }
+
+    public static object read_until_success(string name, Action<object?> validate)
+    {
+        object? ans = "";
+        var read_func = (string name) =>
+        {
+            Console.WriteLine($"Write down {name}");
+            string read = Console.ReadLine();
+            validate(read);
+            ans = read;
+        };
+        try_until_success(read_func, name);
+        return ans;
     }
 }

@@ -6,6 +6,12 @@ using config;
 using System.Text.RegularExpressions;
 public class validation
 {
+    static public T? exeption_if_null<T>(T? value, string name = "Value")
+    {
+        if (value == null)
+            throw new Exception($"{name} is null");
+        return value;
+    }
     static public int? positive_integer(int? value, string message="{0} should be more that zero")
     {
         if (value == null || value < 0)
@@ -13,12 +19,12 @@ public class validation
         return value;
     }
 
-    static public string? name(string? value, string message="{0} isn't aplha")
+    static public string? name(string? value, string message = "{0} isn't aplha")
     {
         var regex = "^[\\p{L}]+$";
         var split_value = value.ToString().Split();
         foreach (var name in split_value)
-            if (!Regex.IsMatch(name, regex))
+            if (!Regex.IsMatch(name, regex) || name.Length < 2)
                 throw new Exception(String.Format(message, value));
         return value;
     }
@@ -50,7 +56,7 @@ public class validation
         return value;
     }
 
-    static public DateTime? date_in_range(DateTime? value, DateTime? start, DateTime? end, 
+    static public DateOnly? date_in_range(DateOnly? value, DateOnly? start, DateOnly? end, 
         string message="{0} isn't in range {1}, {2}")
     {
         if (start > end)
