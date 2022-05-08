@@ -45,6 +45,8 @@ public class Certificate: base_model
         get;
         set;
     }
+    [attributes.Name]
+    public string? user_name { get; set; }
 }
 
 public class CertificateWithoutId : Certificate
@@ -55,4 +57,6 @@ public class CertificateWithoutId : Certificate
         get;
         set;
     }
+    [JsonIgnore]
+    public string? user_name { get; set; }
 }

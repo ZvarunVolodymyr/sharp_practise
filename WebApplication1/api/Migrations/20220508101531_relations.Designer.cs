@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using db;
@@ -11,9 +12,11 @@ using db;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(context))]
-    partial class contextModelSnapshot : ModelSnapshot
+    [Migration("20220508101531_relations")]
+    partial class relations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,11 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime?>("start_date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("user_name")
-                        .IsRequired()
+                    b.Property<string>("userId")
                         .HasColumnType("text");
+
+                    b.Property<int>("user_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("username")
                         .HasColumnType("text");
@@ -185,6 +190,8 @@ namespace WebApplication1.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("id");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Certificates");
                 });
@@ -302,6 +309,15 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplication1.models.Certificate", b =>
+                {
+                    b.HasOne("WebApplication1.models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId");
+
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }
