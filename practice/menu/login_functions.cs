@@ -41,5 +41,10 @@ public class login_functions
     {
         session.logout();
         session.menu_manager.main_menu();
+        Console.WriteLine("Commit changes? (y/n)");
+        string flag = (string)validation_functions.read_until_success("y or n",
+            (obj) => validation.validation.in_array(((string)obj).Trim().ToLower(), new []{"y", "n"}));
+        if(flag == "y")
+            session.db.commit();
     }
 }

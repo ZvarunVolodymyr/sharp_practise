@@ -9,12 +9,7 @@ public class custom_serializer
     {
         private readonly string serializationFormat;
 
-        public DateOnlySerializer() : this(null)
-        {
-        
-        }
-
-        public DateOnlySerializer(string? serializationFormat)
+        public DateOnlySerializer(string? serializationFormat=null)
         {
             this.serializationFormat = serializationFormat;
         }
@@ -22,7 +17,7 @@ public class custom_serializer
         public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
-            return DateOnly.Parse(value!);
+            return DateOnly.Parse(value);
         }
 
         public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)

@@ -3,7 +3,7 @@
     "role": "staff",
     "certificates": {},
     "salary": null,
-    "first_day_in_company": "4/15/2022",
+    "first_day_in_company": "4/21/2022",
     "id": 1,
     "first_name": "Name",
     "last_name": "Name",
@@ -22,11 +22,33 @@
     "role": "staff",
     "certificates": {},
     "salary": null,
-    "first_day_in_company": "4/15/2022",
+    "first_day_in_company": "4/21/2022",
     "id": 3,
     "first_name": "test name",
     "last_name": "test last name",
     "email": "test@mail.ua",
     "password": "07480fb9e85b9396af06f006cf1c95024af2531c65fb505cfbd0add1e2f31573"
+  },
+  {
+    "role": "staff",
+    "certificates": {},
+    "salary": null,
+    "first_day_in_company": "4/21/2022",
+    "id": 4,
+    "first_name": "name",
+    "last_name": "last",
+    "email": "staff3@mail.ua",
+    "password": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "role": "staff",
+    "certificates": {},
+    "salary": null,
+    "first_day_in_company": "4/21/2022",
+    "id": 5,
+    "first_name": "name",
+    "last_name": "name",
+    "email": "staff5@mail.ua",
+    "password": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
   }
 ]

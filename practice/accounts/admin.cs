@@ -14,9 +14,14 @@ public class admin: user
     {
         var certificate_query = session.certificate_query;
 
-        if (status != null)
-            certificate_query = certificate_query.filter_by("status", status);
+        if (status != null && config.config.status_list.Contains(status))
         
+            certificate_query = certificate_query.filter_by("status", status);
+        else
+        {
+            Console.WriteLine("Inncorect status, get draft");
+            certificate_query = certificate_query.filter_by("status", "draft");
+        }
 
         var certificates_list = certificate_query.all();
         foreach (var certificate in certificates_list)

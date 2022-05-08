@@ -25,7 +25,7 @@ public class admin_functions
         
         var status_name = (string)validation_functions.read_until_success("status", (obj) =>
         {
-            validation.validation.in_array(obj, config.config.status_list);
+            validation.validation.in_array(obj, new string[]{"approved", "rejected"});
         });
         bool status = status_name == "approved";
 
