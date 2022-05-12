@@ -45,7 +45,20 @@ public class attributes
             get => value => validation.validation.regex_match((string?) value, config.international_passport);
         }
     }
-
+    public class Password : BaseAttribute
+    {
+        override public Action<object> func
+        {
+            get => value => validation.validation.regex_match((string?)value, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+        }
+    }
+    public class Email : BaseAttribute
+    {
+        override public Action<object> func
+        {
+            get => value => validation.validation.regex_match((string?)value, "^[a-z0-9.]+@[a-z0-9.]+.[a-z0-9.]+");
+        }
+    }
     public class Vaccine: BaseAttribute
     {
 

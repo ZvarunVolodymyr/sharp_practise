@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using WebApplication1.models;
 
 namespace db;
 
-public class context: DbContext
+public class context: IdentityDbContext<User>  
 {
 
     public DbSet<Certificate> Certificates { get; set; }

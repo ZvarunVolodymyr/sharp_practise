@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using db;
 using WebApplication1.helping;
 using helping;
@@ -38,10 +39,18 @@ public class Certificate: base_model
         get;
         set;
     }
-    [attributes.EndDate]
-    public DateTime? end_date
+
+    [attributes.EndDate] public DateTime? end_date { get; set; }
+}
+
+public class CertificateWithoutId : Certificate
+{
+    [JsonIgnore]
+    public int id
     {
         get;
         set;
     }
+    [JsonIgnore]
+    public string? username { get; set; }
 }

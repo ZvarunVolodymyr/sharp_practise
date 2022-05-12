@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using db;
@@ -11,9 +12,11 @@ using db;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(context))]
-    partial class contextModelSnapshot : ModelSnapshot
+    [Migration("20220508113326_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,6 +176,10 @@ namespace WebApplication1.Migrations
 
                     b.Property<DateTime?>("start_date")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("user_name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("username")
                         .HasColumnType("text");

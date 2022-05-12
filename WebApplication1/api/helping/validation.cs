@@ -17,7 +17,7 @@ public class validation
     static public string? name(string? value, string message = "{0} isn't aplha")
     {
         var regex = "^[\\p{L}]+$";
-        var split_value = value.ToString().Split();
+        var split_value = value.ToString().Split('_');
         foreach (var name in split_value)
             if (!Regex.IsMatch(name, regex) || name.Length < 2)
                 throw new Exception(String.Format(message, name));
