@@ -22,7 +22,7 @@ public class certificate_controller: ControllerBase
     public async Task<IActionResult> Get(string? sort_by = null, string? sort_type = null, string? search = null)
     {
         sort_type = sort_type ?? "desc";
-        var ans = _context.Certificates.Where(x => x.user_name == User.Identity.Name).ToList();
+        var ans = _context.Certificates.Where(x => x.username == User.Identity.Name).ToList();
         Console.WriteLine(search);
         if (search != null)
         {
@@ -54,12 +54,14 @@ public class certificate_controller: ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody]CertificateWithoutId new_certificate)
     {
-        new_certificate.user_name = User.Identity.Name;
+        var certificate = new_certificate as Certificate;
+        certificate.username = User.Identity.Name;
         if (ModelState.IsValid)  
-        {    
-            _context.Certificates.Add(new_certificate);
+        {
+            // Console.WriteLine(new_certificate.username);
+            _context.Certificates.Add(certificate);
             _context.SaveChanges();
-            return Ok(new_certificate);  
+            return Ok(certificate);  
         }  
         return BadRequest();  
     }
@@ -67,7 +69,7 @@ public class certificate_controller: ControllerBase
     [Authorize]
     public async Task<IActionResult> detail_get(int id)
     {
-        var ans = _context.Certificates.Where(x => x.user_name == User.Identity.Name)
+        var ans = _context.Certificates.Where(x => x.username == User.Identity.Name)
             .FirstOrDefault(obj => obj.id == id);
         if (ans == null)
             return NotFound(404);
@@ -77,13 +79,13 @@ public class certificate_controller: ControllerBase
     [Authorize]
     public async Task<IActionResult> detail_put(int id, [FromBody]CertificateWithoutId update_certificate)
     {
-        var ans = _context.Certificates.Where(x => x.user_name == User.Identity.Name)
+        var ans = _context.Certificates.Where(x => x.username == User.Identity.Name)
             .FirstOrDefault(obj => obj.id == id);
         if (ans == null)
             return NotFound();
         foreach (var property in update_certificate.GetType().GetProperties())
         {
-            if(!new []{"id", "user_name"}.Contains(property.Name))
+            if(!new []{"id", "username"}.Contains(property.Name))
                 property.SetValue(ans, property.GetValue(update_certificate));
         }
         _context.SaveChanges();
@@ -94,7 +96,7 @@ public class certificate_controller: ControllerBase
     [Authorize]
     public async Task<IActionResult> detail_delete(int id)
     {
-        var ans = _context.Certificates.Where(x => x.user_name == User.Identity.Name)
+        var ans = _context.Certificates.Where(x => x.username == User.Identity.Name)
             .FirstOrDefault(obj => obj.id == id);
         if (ans == null)
             return NotFound();

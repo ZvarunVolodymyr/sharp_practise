@@ -39,14 +39,8 @@ public class Certificate: base_model
         get;
         set;
     }
-    [attributes.EndDate]
-    public DateTime? end_date
-    {
-        get;
-        set;
-    }
-    [attributes.Name]
-    public string? user_name { get; set; }
+
+    [attributes.EndDate] public DateTime? end_date { get; set; }
 }
 
 public class CertificateWithoutId : Certificate
@@ -58,5 +52,5 @@ public class CertificateWithoutId : Certificate
         set;
     }
     [JsonIgnore]
-    public string? user_name { get; set; }
+    public string? username { get; set; }
 }

@@ -174,10 +174,6 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime?>("start_date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("user_name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("username")
                         .HasColumnType("text");
 

@@ -9,7 +9,6 @@ public class context: IdentityDbContext<User>
 {
 
     public DbSet<Certificate> Certificates { get; set; }
-    // public DbSet<User> User { get; set; }
 
     public context(DbContextOptions<context> options) : base(options)  
     {  

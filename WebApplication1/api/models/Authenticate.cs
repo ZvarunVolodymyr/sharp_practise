@@ -19,7 +19,7 @@ public class register
 {
     [attributes.Email]
     public string? email { get; set; }
-    [attributes.Name]
+    // [attributes.Name]
     public string? username { get; set; }
     // [attributes.Password]
     public string? password { get; set; }
